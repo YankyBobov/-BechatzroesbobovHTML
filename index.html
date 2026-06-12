@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>בחצרות באבוב</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+
+/* ════════════════════════════════
+   TOKENS
+════════════════════════════════ */
+:root {
+  --royal:       #1B2A5E;
+  --royal2:      #243474;
+  --royal-dark:  #111c42;
+  --gold:        #C8922A;
+  --gold-lt:     #E5B84A;
+  --gold-pale:   #F5E8C0;
+  --parchment:   #F7F3EC;
+  --white:       #FFFFFF;
+  --ink:         #1A1A2E;
+  --muted:       #6B6B7A;
+  --border:      #E0D8C8;
+}
+
+/* ════════════════════════════════
+   RESET
+════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Heebo', 'Arial Hebrew', sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ════════════════════════════════
+   HEADER
+════════════════════════════════ */
+.site-header {
+  background: linear-gradient(180deg, var(--royal-dark) 0%, var(--royal) 100%);
+  padding: 2rem 2rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle star-of-david-ish dot pattern */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(200,146,42,.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+/* Decorative gold crown lines flanking the logo area */
+.crown-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-bottom: 1.1rem;
+}
+.crown-line {
+  flex: 1;
+  max-width: 160px;
+  height: 1px;
+  background: linear-gradient(to left, transparent, var(--gold-lt));
+  position: relative;
+}
+.crown-line.right {
+  background: linear-gradient(to right, transparent, var(--gold-lt));
+}
+.crown-line::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  width: 7px; height: 7px;
+  background: var(--gold-lt);
+  border-radius: 50%;
+}
+.crown-line::after     { right: 0; }
+.crown-line.right::after { left: 0; }
+
+.logo-circle {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 0 6px rgba(200,146,42,.18), 0 8px 32px rgba(0,0,0,.35);
+  object-fit: contain;
+  background: #fff;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.site-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  color: var(--gold-lt);
+  letter-spacing: -.01em;
+  line-height: 1;
+  margin-bottom: .35rem;
+}
+.site-tagline {
+  color: rgba(255,255,255,.55);
+  font-size: .88rem;
+  font-weight: 300;
+  letter-spacing: .04em;
+  margin-bottom: 1.8rem;
+}
+
+/* ════════════════════════════════
+   NAVIGATION
+════════════════════════════════ */
+.site-nav {
+  border-top: 1px solid rgba(200,146,42,.25);
+  position: relative;
+}
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.site-nav ul li a {
+  display: block;
+  color: rgba(255,255,255,.72);
+  padding: .75rem 1.3rem;
+  font-size: .9rem;
+  font-weight: 500;
+  transition: color .2s;
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+.site-nav ul li a:hover,
+.site-nav ul li a.active {
+  color: var(--gold-lt);
+  border-bottom-color: var(--gold);
+}
+
+/* sticky nav */
+.nav-sticky {
+  position: sticky;
+  top: 0;
+  background: var(--royal);
+  z-index: 200;
+  border-bottom: 2px solid var(--gold);
+  box-shadow: 0 2px 14px rgba(0,0,0,.22);
+}
+
+/* ════════════════════════════════
+   HERO BANNER
+════════════════════════════════ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  max-height: 520px;
+}
+.hero img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(17,28,66,.92) 0%,
+    rgba(17,28,66,.45) 45%,
+    transparent 100%
+  );
+}
+.hero-caption {
+  position: absolute;
+  bottom: 0; right: 0; left: 0;
+  padding: 2.5rem 2.5rem 2.2rem;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--royal-dark);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .28rem .9rem;
+  border-radius: 2px;
+  margin-bottom: .75rem;
+}
+.hero-caption h2 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  max-width: 700px;
+  margin: 0 auto .5rem;
+}
+.hero-caption p {
+  color: rgba(255,255,255,.68);
+  font-size: .92rem;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ════════════════════════════════
+   MARQUEE STRIP
+════════════════════════════════ */
+.marquee-strip {
+  background: var(--gold);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: .52rem 0;
+}
+.marquee-track {
+  display: inline-block;
+  animation: marquee-rtl 35s linear infinite;
+  padding-right: 100%;
+}
+@keyframes marquee-rtl {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.marquee-track span {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--royal-dark);
+  padding: 0 2rem;
+}
+.marquee-track span::before {
+  content: '✦';
+  margin-left: .8rem;
+  opacity: .5;
+}
+
+/* ════════════════════════════════
+   PAGE WRAPPER
+════════════════════════════════ */
+.page-wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ════════════════════════════════
+   SECTION TITLE
+════════════════════════════════ */
+.sec-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+.sec-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--royal);
+  white-space: nowrap;
+}
+.sec-title-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.sec-title-accent {
+  width: 36px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-bottom: .5rem;
+}
+
+/* ════════════════════════════════
+   CATEGORY PILLS
+════════════════════════════════ */
+.cat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+.cat-pill {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 600;
+  padding: .38rem 1.1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cat-pill:hover,
+.cat-pill.active {
+  background: var(--royal);
+  border-color: var(--royal);
+  color: var(--gold-lt);
+}
+
+/* ════════════════════════════════
+   PHOTO GRID
+   Layout: 1 featured (wide) + 2 medium side-by-side, then 4-col row
+════════════════════════════════ */
+.photo-grid {
+  display: grid;
+  gap: 1.2rem;
+}
+
+/* Row 1: featured left (spans 2 rows) + 2 stacked right */
+.photo-grid-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.photo-card-featured {
+  grid-row: 1 / 3;
+}
+
+/* Row 2: 4 equal cards */
+.photo-grid-bottom {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+
+/* ════════════════════════════════
+   PHOTO CARD
+════════════════════════════════ */
+.photo-card {
+  background: var(--white);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  transition: transform .22s ease, box-shadow .22s ease;
+  cursor: pointer;
+}
+.photo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(27,42,94,.14);
+}
+.photo-card img {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .35s ease;
+}
+.photo-card:hover img {
+  transform: scale(1.03);
+}
+.photo-card-img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.photo-card-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(17,28,66,.55), transparent 55%);
+  opacity: 0;
+  transition: opacity .25s;
+}
+.photo-card:hover .photo-card-img-wrap::after {
+  opacity: 1;
+}
+
+/* featured card image taller */
+.photo-card-featured .photo-card-img-wrap img {
+  height: 100%;
+  min-height: 420px;
+}
+/* medium cards */
+.photo-grid-top > .photo-card:not(.photo-card-featured) .photo-card-img-wrap img {
+  height: 196px;
+}
+/* bottom row */
+.photo-grid-bottom .photo-card-img-wrap img {
+  height: 175px;
+}
+
+.photo-card-label {
+  padding: .85rem 1rem .9rem;
+  border-top: 2px solid var(--gold);
+}
+.photo-card-label .cat-tag {
+  font-size: .67rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: .25rem;
+}
+.photo-card-label h3 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--royal);
+  line-height: 1.35;
+}
+
+/* ════════════════════════════════
+   DIVIDER ORNAMENT
+════════════════════════════════ */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 2.5rem;
+  text-align: center;
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.ornament-center {
+  color: var(--gold);
+  font-size: 1.1rem;
+  letter-spacing: .3em;
+  opacity: .8;
+}
+
+/* ════════════════════════════════
+   ABOUT SECTION
+════════════════════════════════ */
+.about-section {
+  background: linear-gradient(135deg, var(--royal) 0%, var(--royal2) 100%);
+  border-radius: 14px;
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+.about-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(200,146,42,.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.about-section .gold-star {
+  font-size: 1.4rem;
+  color: var(--gold-lt);
+  margin-bottom: .9rem;
+  letter-spacing: .3em;
+}
+.about-section h2 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gold-lt);
+  margin-bottom: .8rem;
+}
+.about-section p {
+  color: rgba(255,255,255,.65);
+  max-width: 560px;
+  margin: 0 auto;
+  font-size: .95rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+
+/* ════════════════════════════════
+   SUBSCRIBE SECTION
+════════════════════════════════ */
+.subscribe-section {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 2.8rem 2rem;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  box-shadow: 0 4px 20px rgba(27,42,94,.06);
+}
+.subscribe-section .sec-title-accent {
+  margin: 0 auto .8rem;
+}
+.subscribe-section h3 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.4rem;
+  color: var(--royal);
+  margin-bottom: .4rem;
+}
+.subscribe-section p {
+  color: var(--muted);
+  font-size: .87rem;
+  margin-bottom: 1.4rem;
+}
+.sub-form {
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sub-form input {
+  flex: 1 1 200px;
+  padding: .65rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Heebo', sans-serif;
+  font-size: .9rem;
+  direction: ltr;
+  text-align: left;
+  outline: none;
+  transition: border-color .2s;
+}
+.sub-form input:focus { border-color: var(--gold); }
+.sub-form button {
+  background: var(--royal);
+  color: var(--gold-lt);
+  border: none;
+  padding: .65rem 1.7rem;
+  border-radius: 8px;
+  font-family: 'Heebo', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.sub-form button:hover { background: var(--royal2); }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+.site-footer {
+  background: var(--royal-dark);
+  padding: 2.8rem 2rem 1.2rem;
+  text-align: center;
+}
+.footer-logo {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  object-fit: contain;
+  background: #fff;
+  margin: 0 auto .9rem;
+}
+.footer-name {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.25rem;
+  color: var(--gold-lt);
+  margin-bottom: .3rem;
+}
+.footer-sub {
+  color: rgba(255,255,255,.4);
+  font-size: .78rem;
+  margin-bottom: 1.5rem;
+}
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1.8rem;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.footer-nav a {
+  color: rgba(255,255,255,.5);
+  font-size: .82rem;
+  transition: color .2s;
+}
+.footer-nav a:hover { color: var(--gold-lt); }
+.footer-rule {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,.07);
+  margin-bottom: 1rem;
+}
+.footer-copy {
+  color: rgba(255,255,255,.25);
+  font-size: .73rem;
+}
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 900px) {
+  .photo-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+  .photo-grid-top {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .photo-card-featured { grid-row: auto; }
+  .photo-card-featured .photo-card-img-wrap img { min-height: 240px; height: 240px; }
+  .photo-grid-top > .photo-card:not(.photo-card-featured) .photo-card-img-wrap img { height: 200px; }
+  .photo-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+  .hero img { height: 300px; }
+  .site-nav ul li a { padding: .6rem .8rem; font-size: .82rem; }
+  .about-section { padding: 2.5rem 1.5rem; }
+}
+@media (max-width: 440px) {
+  .photo-grid-bottom { grid-template-columns: 1fr; }
+  .crown-line { max-width: 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HEADER — logo + crown ornament + nav
+══════════════════════════════════════ -->
+<header class="site-header">
+  <div class="crown-wrap">
+    <div class="crown-line"></div>
+    <img
+      class="logo-circle"
+      src="https://yankybobov.github.io/bechatzroesbobov/logo.png"
+      alt="לוגו בחצרות באבוב"
+      onerror="this.style.display='none'"
+    />
+    <div class="crown-line right"></div>
+  </div>
+
+  <h1 class="site-title">בחצרות באבוב</h1>
+  <p class="site-tagline">מהנעשה והנשמע בחצרות קדשינו</p>
+
+  <nav class="site-nav nav-sticky">
+    <ul>
+      <li><a href="#"          class="active">הויפט בלאט</a></li>
+      <li><a href="#gallery">גאלעריע</a></li>
+      <li><a href="#videos">ווידיא</a></li>
+      <li><a href="#articles">באריכטן</a></li>
+      <li><a href="#smachos">שמחות</a></li>
+      <li><a href="#contact">רעדאקציע</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <img
+    src="https://yankybobov.github.io/bechatzroesbobov/wedding.jpg"
+    alt="חתונה בצל רבינו"
+    onerror="this.src='https://via.placeholder.com/1200x520/1B2A5E/C8922A?text=%D7%91%D7%97%D7%A6%D7%A8%D7%95%D7%AA+%D7%91%D7%90%D7%91%D7%95%D7%91'"
+  />
+  <div class="hero-overlay"></div>
+  <div class="hero-caption">
+    <div class="hero-badge">שמחות</div>
+    <h2>חתונה בצל רבינו שליט"א</h2>
+    <p>בצל כ"ק מרן אדמו"ר שליט"א — מהנעשה והנשמע בחצרות הקודש באבוב</p>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>ברוכים הבאים לבחצרות באבוב</span>
+    <span>בנשיאות כ"ק מרן רבינו שליט"א</span>
+    <span>בילדער</span>
+    <span>שמחות</span>
+    <span>ימים טובים</span>
+    <span>באזוכן</span>
+    <span>ישיבות</span>
+    <span>ברוכים הבאים לבחצרות באבוב</span>
+    <span>בנשיאות כ"ק מרן רבינו שליט"א</span>
+    <span>בילדער</span>
+    <span>שמחות</span>
+    <span>ימים טובים</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN GALLERY
+══════════════════════════════════════ -->
+<div class="page-wrap">
+
+  <!-- Category pills -->
+  <div class="cat-pills">
+    <div class="cat-pill active">אלעס</div>
+    <div class="cat-pill">שמחות</div>
+    <div class="cat-pill">ימים טובים</div>
+    <div class="cat-pill">באזוכן</div>
+    <div class="cat-pill">ראש חודש</div>
+    <div class="cat-pill">ישיבות</div>
+    <div class="cat-pill">דינערס</div>
+    <div class="cat-pill">איבריג</div>
+  </div>
+
+  <!-- Section header -->
+  <div class="sec-title-wrap">
+    <div class="sec-title-accent" style="margin-bottom:0"></div>
+    <span class="sec-title">לעצטע בילדער</span>
+    <div class="sec-title-line"></div>
+  </div>
+
+  <!-- TOP ROW: featured + 2 stacked -->
+  <div id="gallery" class="photo-grid-top">
+
+    <!-- FEATURED -->
+    <div class="photo-card photo-card-featured">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/smachos.jpg"
+          alt="שמחות"
+          style="height:420px"
+          onerror="this.src='https://via.placeholder.com/700x420/1B2A5E/C8922A?text=%D7%A9%D7%9E%D7%97%D7%95%D7%AA'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">שמחות</div>
+        <h3>שמחות אין חצרות הקודש</h3>
+      </div>
+    </div>
+
+    <!-- MEDIUM 1 -->
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/yamim-tovim.jpg"
+          alt="ימים טובים"
+          onerror="this.src='https://via.placeholder.com/480x196/1B2A5E/C8922A?text=%D7%99%D7%9E%D7%99%D7%9D+%D7%98%D7%95%D7%91%D7%99%D7%9D'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">ימים טובים</div>
+        <h3>ימים טובים מיטן רבי'ן שליט"א</h3>
+      </div>
+    </div>
+
+    <!-- MEDIUM 2 -->
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/rosh-chodesh.jpg"
+          alt="ראש חודש"
+          onerror="this.src='https://via.placeholder.com/480x196/1B2A5E/C8922A?text=%D7%A8%D7%90%D7%A9+%D7%97%D7%95%D7%93%D7%A9'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">ראש חודש</div>
+        <h3>ראש חודש — תפילות ושמחה</h3>
+      </div>
+    </div>
+
+  </div><!-- /photo-grid-top -->
+
+  <!-- BOTTOM ROW: 4 equal cards -->
+  <div class="photo-grid-bottom">
+
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/bozichen.jpg"
+          alt="באזיכן"
+          onerror="this.src='https://via.placeholder.com/360x175/1B2A5E/C8922A?text=%D7%91%D7%90%D7%96%D7%99%D7%9B%D7%9F'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">באזוכן</div>
+        <h3>באזיכן ביים רבי'ן שליט"א</h3>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/diners.jpg"
+          alt="דינערס"
+          onerror="this.src='https://via.placeholder.com/360x175/1B2A5E/C8922A?text=%D7%93%D7%99%D7%A0%D7%A2%D7%A8%D7%A1'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">דינערס</div>
+        <h3>יערליכע דינערס אין ישיבה</h3>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/iberige.jpg"
+          alt="איבריג"
+          onerror="this.src='https://via.placeholder.com/360x175/1B2A5E/C8922A?text=%D7%90%D7%99%D7%91%D7%A8%D7%99%D7%92'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">גאלעריע</div>
+        <h3>איבריגע בילדער פון חצרות</h3>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-card-img-wrap">
+        <img
+          src="https://yankybobov.github.io/bechatzroesbobov/yeshivos.jpg"
+          alt="ישיבות"
+          onerror="this.src='https://via.placeholder.com/360x175/1B2A5E/C8922A?text=%D7%99%D7%A9%D7%99%D7%91%D7%95%D7%AA'"
+        />
+      </div>
+      <div class="photo-card-label">
+        <div class="cat-tag">ישיבות</div>
+        <h3>ישיבת באבוב — תורה ולמדנות</h3>
+      </div>
+    </div>
+
+  </div><!-- /photo-grid-bottom -->
+
+  <!-- ORNAMENT -->
+  <div class="ornament-divider">
+    <div class="ornament-center">✦ &nbsp; ✦ &nbsp; ✦</div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about-section">
+    <div class="gold-star">✦ ✦ ✦</div>
+    <h2>בצל כ"ק מרן אדמו"ר שליט"א</h2>
+    <p>
+      חצרות הקודש באבוב — מקום של תורה, תפילה ועבודת ה׳.
+      מהנעשה והנשמע בכל עת ובכל מקום, מסורת הדורות
+      וקדושת הרבי שליט"א.
+    </p>
+  </div>
+
+  <!-- SUBSCRIBE -->
+  <div class="subscribe-section">
+    <div class="sec-title-accent"></div>
+    <h3>סיינט אייך אויף צו באקומען אפדעיטס</h3>
+    <p>באקומט די לעצטיגע בילדער, שמחות און באריכטן פון בחצרות באבוב</p>
+    <div class="sub-form">
+      <input type="email" placeholder="your@email.com"/>
+      <button type="button">סאבסקרייבן</button>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <img
+    class="footer-logo"
+    src="https://yankybobov.github.io/bechatzroesbobov/logo.png"
+    alt="לוגו"
+    onerror="this.style.display='none'"
+  />
+  <div class="footer-name">בחצרות באבוב</div>
+  <div class="footer-sub">מהנעשה והנשמע בחצרות קדשינו</div>
+
+  <nav class="footer-nav">
+    <a href="#">הויפט בלאט</a>
+    <a href="#gallery">גאלעריע</a>
+    <a href="#videos">ווידיא</a>
+    <a href="#articles">באריכטן</a>
+    <a href="#smachos">שמחות</a>
+    <a href="#contact">רעדאקציע</a>
+  </nav>
+
+  <hr class="footer-rule"/>
+  <div class="footer-copy">בחצרות באבוב — כל הזכויות שמורות</div>
+</footer>
+
+<script>
+  // Category pill filter (visual only — highlights active pill)
+  document.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
